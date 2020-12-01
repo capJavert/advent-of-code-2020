@@ -7,19 +7,21 @@ const main = async () => {
 
     let a
     let b
+    let c
 
-    input.some((num1) => input.some((num2) => {
-        if (+num1 + +num2 === 2020) {
+    input.some((num1) => input.some((num2) => input.some((num3) => {
+        if (+num1 + +num2 + +num3 === 2020) {
             a = +num1
             b = +num2
+            c = +num3
 
             return true
         }
 
         return false
-    }))
+    })))
 
-    console.log(a * b)
+    console.log(a * b * c)
 }
 
 main()
