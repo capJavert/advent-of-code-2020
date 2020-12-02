@@ -21,9 +21,8 @@ const main = async () => {
     const invalidCount = entries.reduce((acc, {
         min, max, letter, password,
     }) => {
-        const occurrences = password.split(letter).length - 1
-
-        if (min > occurrences || max < occurrences) {
+        if ((password[min - 1] === letter && password[max - 1] === letter)
+        || (password[min - 1] !== letter && password[max - 1] !== letter)) {
             return acc
         }
 
