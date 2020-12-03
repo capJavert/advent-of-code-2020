@@ -17,6 +17,7 @@
     "rules": {
         "semi": "off",
         "indent": ["error", 4],
-        "no-console": "off"
+        "no-console": "off",
+        "comma-dangle": "off"
     }
 }

@@ -7,18 +7,29 @@ const main = async () => {
 
     const width = input[0].length
     const height = input.length
-    let x = 0
-    let treesCount = 0
 
-    for (let y = 0; y < height; y += 1) {
-        if (input[y][x] === '#') {
-            treesCount += 1
+    const countTrees = (moveX, moveY) => {
+        let x = 0
+        let treesCount = 0
+
+        for (let y = 0; y < height; y += moveY) {
+            if (input[y][x] === '#') {
+                treesCount += 1
+            }
+
+            x = (x + moveX) % width
         }
 
-        x = (x + 3) % width
+        return treesCount
     }
 
-    console.log(treesCount)
+    console.log(
+        countTrees(1, 1)
+        * countTrees(3, 1)
+        * countTrees(5, 1)
+        * countTrees(7, 1)
+        * countTrees(1, 2)
+    )
 }
 
 main()
