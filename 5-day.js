@@ -6,6 +6,16 @@ const main = async () => {
     const input = data.split(/\r?\n/)
     const allRows = new Array(128).fill(null).map((_, index) => index)
     const allColumns = new Array(8).fill(null).map((_, index) => index)
+    const allSeatIds = allColumns.reduce((acc, column) => {
+        allRows.forEach((row) => {
+            const seatId = row * 8 + column
+
+            acc[seatId] = { row, column }
+        })
+
+        return acc
+    }, {})
+    console.log(Object.values(allSeatIds).length)
 
     const result = input.reduce((acc, item) => {
         const letters = item.split('')
@@ -29,15 +39,29 @@ const main = async () => {
         })
 
         const seatId = rows[0] * 8 + columns[0]
-
-        if (seatId > acc) {
-            return seatId
-        }
+        acc[seatId] = seatId
 
         return acc
-    }, 0)
+    }, {})
 
-    console.log(result)
+    let mySeatId
+
+    allRows.forEach((acc, row) => {
+        let rowRender = ''
+
+        allColumns.forEach((column) => {
+            const seatId = row * 8 + column
+
+            rowRender += result[seatId] ? '[X]' : '[ ]'
+        })
+
+        if ((rowRender.match(/\[ \]/g) || []).length === 1) {
+            mySeatId = row * 8 + rowRender.replace(/\[|\]/g, '').indexOf(' ')
+        }
+        console.log(rowRender)
+    })
+
+    console.log(mySeatId)
 }
 
 main()
