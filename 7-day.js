@@ -41,36 +41,18 @@ const main = async () => {
         }
     })
 
-    const matches = {}
+    let bagSum = 0
 
-    const findBag = (bags, path = [], current, id) => {
-        const isMatch = bags.some((bag) => bag === myBag)
-
-        if (bags.length === 0) {
-            return path
-        }
-
-        if (isMatch) {
-            matches[id] = true
-            return [true]
-        }
-
-        return [
-            ...path,
-            ...bags.map((bag) => findBag(Object.keys(rules[bag]), [
-                ...path,
-                bag
-            ], bag, id))
-        ]
+    const findBag = (bags, parent, id, modifier) => {
+        bags.forEach((bag) => {
+            bagSum += parent[bag] * modifier
+            findBag(Object.keys(rules[bag]), rules[bag], bag, parent[bag] * modifier)
+        })
     }
 
-    Object.keys(bagNames).forEach((name) => {
-        const bags = rules[name]
+    findBag(Object.keys(rules[myBag]), rules[myBag], myBag, 1)
 
-        findBag(Object.keys(bags), [name], name, name)
-    })
-
-    console.log(Object.keys(matches).length)
+    console.log(bagSum)
 }
 
 main()
