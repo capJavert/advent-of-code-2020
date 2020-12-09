@@ -45,20 +45,44 @@ const main = async () => {
         return program
     }
 
-    const program = compile()
+    input.forEach((line, lineIndex) => {
+        let inputVariation
 
-    const result = program(
-        // eslint-disable-next-line no-unused-vars
-        input, (acc, callstack, inst, code, index, nextCode, nextIndex, nextInst) => {
-            if (callstack.includes(nextIndex)) {
-                return false
-            }
-
-            return true
+        if (line.startsWith('nop')) {
+            inputVariation = [...input]
+            inputVariation.splice(lineIndex, 1, line.replace('nop', 'jmp'))
         }
-    )
 
-    console.log(result)
+        if (line.startsWith('jmp')) {
+            inputVariation = [...input]
+            inputVariation.splice(lineIndex, 1, line.replace('jmp', 'nop'))
+        }
+
+        if (!inputVariation) {
+            return
+        }
+
+        const program = compile()
+
+        let isLoop = false
+
+        const result = program(
+            // eslint-disable-next-line no-unused-vars
+            inputVariation, (acc, callstack, inst, code, index, nextCode, nextIndex, nextInst) => {
+                if (callstack.includes(nextIndex)) {
+                    isLoop = true
+
+                    return false
+                }
+
+                return true
+            }
+        )
+
+        if (!isLoop) {
+            console.log(result)
+        }
+    })
 }
 
 main()
