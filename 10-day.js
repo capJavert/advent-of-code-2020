@@ -7,22 +7,13 @@ const main = async () => {
 
     const ordered = input.map((item) => +item).sort((a, b) => +a - +b)
 
-    const result = [0, ...ordered, ordered[ordered.length - 1] + 3]
-        .reduce((acc, item, index, array) => {
-            if (index > 0) {
-                const diff = item - array[index - 1]
+    const result = ordered.reduce((acc, item) => {
+        acc[item] = (acc[item - 3] || 0) + (acc[item - 2] || 0) + (acc[item - 1] || 0)
 
-                if (!acc[diff]) {
-                    acc[diff] = 0
-                }
+        return acc
+    }, [1])
 
-                acc[diff] += 1
-            }
-
-            return acc
-        }, {})
-
-    console.log(result[1] * result[3])
+    console.log(result[result.length - 1])
 }
 
 main()

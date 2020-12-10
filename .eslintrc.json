@@ -18,6 +18,7 @@
         "semi": "off",
         "indent": ["error", 4],
         "no-console": "off",
-        "comma-dangle": "off"
+        "comma-dangle": "off",
+        "arrow-body-style": "off"
     }
 }
