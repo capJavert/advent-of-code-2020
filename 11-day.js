@@ -23,6 +23,14 @@ const main = async () => {
         return grid[y][x]
     }
 
+    const getDirection = (y, x, directionY, directionX) => {
+        if (get(y, x) !== '.' || typeof get(y, x) === 'undefined') {
+            return get(y, x)
+        }
+
+        return getDirection(y + directionY, x + directionX, directionY, directionX)
+    }
+
     // eslint-disable-next-line no-unused-vars
     const print = () => {
         Object.values(grid).forEach((item) => {
@@ -48,29 +56,29 @@ const main = async () => {
 
                 if (get(y, x) === 'L') {
                     if ([
-                        get(y - 1, x - 1),
-                        get(y - 1, x + 0),
-                        get(y - 1, x + 1),
-                        get(y + 0, x - 1),
-                        get(y + 0, x + 1),
-                        get(y + 1, x - 1),
-                        get(y + 1, x + 0),
-                        get(y + 1, x + 1)
+                        getDirection(y - 1, x - 1, -1, -1),
+                        getDirection(y - 1, x + 0, -1, 0),
+                        getDirection(y - 1, x + 1, -1, 1),
+                        getDirection(y + 0, x - 1, 0, -1),
+                        getDirection(y + 0, x + 1, 0, 1),
+                        getDirection(y + 1, x - 1, 1, -1),
+                        getDirection(y + 1, x + 0, 1, 0),
+                        getDirection(y + 1, x + 1, 1, 1)
                     ].every((seat) => seat === 'L' || typeof seat === 'undefined' || seat === '.')) {
                         acc[y][x] = '#'
                         didChange = true
                     }
                 } else if (get(y, x) === '#') {
                     if ([
-                        get(y - 1, x - 1),
-                        get(y - 1, x + 0),
-                        get(y - 1, x + 1),
-                        get(y + 0, x - 1),
-                        get(y + 0, x + 1),
-                        get(y + 1, x - 1),
-                        get(y + 1, x + 0),
-                        get(y + 1, x + 1)
-                    ].reduce((count, seat) => (seat === '#' ? count + 1 : count), 0) >= 4) {
+                        getDirection(y - 1, x - 1, -1, -1),
+                        getDirection(y - 1, x + 0, -1, 0),
+                        getDirection(y - 1, x + 1, -1, 1),
+                        getDirection(y + 0, x - 1, 0, -1),
+                        getDirection(y + 0, x + 1, 0, 1),
+                        getDirection(y + 1, x - 1, 1, -1),
+                        getDirection(y + 1, x + 0, 1, 0),
+                        getDirection(y + 1, x + 1, 1, 1)
+                    ].reduce((count, seat) => (seat === '#' ? count + 1 : count), 0) >= 5) {
                         acc[y][x] = 'L'
                         didChange = true
                     }
