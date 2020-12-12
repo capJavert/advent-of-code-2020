@@ -19,6 +19,7 @@
         "indent": ["error", 4],
         "no-console": "off",
         "comma-dangle": "off",
-        "arrow-body-style": "off"
+        "arrow-body-style": "off",
+        "no-constant-condition": "off"
     }
 }
