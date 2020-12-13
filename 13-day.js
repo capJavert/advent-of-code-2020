@@ -5,27 +5,28 @@ const main = async () => {
     const data = await fetch('https://pastebin.com/raw/tSvDRbS4').then((response) => response.text())
     const input = data.split(/\r?\n/)
 
-    const [estimate, buses] = input
+    const [, buses] = input
 
-    const result = buses.split(',').reduce((acc, item) => {
+    const result = buses.split(',').reduce((acc, item, index) => {
+        if (index === 0) {
+            acc.timestamp = +item
+            acc.step = +item
+
+            return acc
+        }
+
         if (item !== 'x') {
-            let departure = 0
-
-            while (departure < +estimate) {
-                departure += +item
+            while ((acc.timestamp + index) % +item !== 0) {
+                acc.timestamp += acc.step
             }
 
-            const diff = departure - +estimate
-
-            if (diff < acc.diff) {
-                return { id: +item, diff }
-            }
+            acc.step *= +item
         }
 
         return acc
-    }, { id: null, diff: Infinity })
+    }, { timestamp: 0, step: 0 })
 
-    console.log(result.id * result.diff)
+    console.log(result.timestamp)
 }
 
 main()
