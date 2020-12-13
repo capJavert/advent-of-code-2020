@@ -12,17 +12,77 @@ const main = async () => {
 
         switch (action) {
         case 'N':
-            acc.y -= +value
-            break
+            switch (acc.direction) {
+            case 0:
+                acc.waypoint.y += +value
+                break;
+            case 90:
+                acc.waypoint.x -= +value
+                break;
+            case 180:
+                acc.waypoint.y -= +value
+                break;
+            case 270:
+                acc.waypoint.x += +value
+                break;
+            default:
+                throw new Error(`Unknown direction '${acc.direction}'`)
+            }
+            break;
         case 'S':
-            acc.y += +value
-            break
+            switch (acc.direction) {
+            case 0:
+                acc.waypoint.y -= +value
+                break;
+            case 90:
+                acc.waypoint.x += +value
+                break;
+            case 180:
+                acc.waypoint.y += +value
+                break;
+            case 270:
+                acc.waypoint.x -= +value
+                break;
+            default:
+                throw new Error(`Unknown direction '${acc.direction}'`)
+            }
+            break;
         case 'E':
-            acc.x += +value
-            break
+            switch (acc.direction) {
+            case 0:
+                acc.waypoint.x += +value
+                break;
+            case 90:
+                acc.waypoint.y += +value
+                break;
+            case 180:
+                acc.waypoint.x -= +value
+                break;
+            case 270:
+                acc.waypoint.y -= +value
+                break;
+            default:
+                throw new Error(`Unknown direction '${acc.direction}'`)
+            }
+            break;
         case 'W':
-            acc.x -= +value
-            break
+            switch (acc.direction) {
+            case 0:
+                acc.waypoint.x -= +value
+                break;
+            case 90:
+                acc.waypoint.y -= +value
+                break;
+            case 180:
+                acc.waypoint.x += +value
+                break;
+            case 270:
+                acc.waypoint.y += +value
+                break;
+            default:
+                throw new Error(`Unknown direction '${acc.direction}'`)
+            }
+            break;
         case 'L':
             acc.direction = (360 + (acc.direction - +value)) % 360
             break
@@ -31,18 +91,22 @@ const main = async () => {
             break
         case 'F':
             switch (acc.direction) {
-            case 90:
-                acc.x += +value
-                break
-            case 180:
-                acc.y += +value
-                break
-            case 270:
-                acc.x -= +value
-                break
             case 0:
-                acc.y -= +value
-                break
+                acc.x += acc.waypoint.x * +value
+                acc.y += acc.waypoint.y * +value
+                break;
+            case 90:
+                acc.x += acc.waypoint.y * +value
+                acc.y += acc.waypoint.x * +value * -1
+                break;
+            case 180:
+                acc.x += acc.waypoint.x * +value * -1
+                acc.y += acc.waypoint.y * +value * -1
+                break;
+            case 270:
+                acc.x += acc.waypoint.y * +value * -1
+                acc.y += acc.waypoint.x * +value
+                break;
             default:
                 throw new Error(`Unknown direction '${acc.direction}'`)
             }
@@ -52,7 +116,9 @@ const main = async () => {
         }
 
         return acc
-    }, { x: 0, y: 0, direction: 90 })
+    }, {
+        x: 0, y: 0, direction: 0, waypoint: { x: 10, y: 1 }
+    })
 
     console.log(Math.abs(result.x) + Math.abs(result.y))
 }
