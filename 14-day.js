@@ -19,15 +19,33 @@ const main = async () => {
         if (mem) {
             const { address, value } = mem.groups
 
-            const binValue = dec2bin(value)
+            const binAddress = dec2bin(address)
 
-            acc.mem[address] = parseInt(binValue.split('').map((bit, index) => {
-                if (acc.mask[index] !== 'X') {
+            const maskedAddress = binAddress.split('').map((bit, index) => {
+                if (acc.mask[index] !== '0') {
                     return acc.mask[index]
                 }
 
                 return bit
-            }).join(''), 2)
+            })
+
+            const floatingBits = maskedAddress.reduce((acc2, bit, index) => (bit === 'X' ? [...acc2, index] : acc2), [])
+
+            // shamelessly took from http://zacg.github.io/blog/2013/08/02/binary-combinations-in-javascript/
+            for (let y = 0; y < 2 ** floatingBits.length; y += 1) {
+                const floatingAddress = [...maskedAddress]
+
+                for (let x = 0; x < floatingBits.length; x += 1) {
+                    // shift bit and and it with 1
+                    if ((y >> x) & 1) {
+                        floatingAddress[floatingBits[x]] = 1
+                    } else {
+                        floatingAddress[floatingBits[x]] = 0
+                    }
+                }
+
+                acc.mem[parseInt(floatingAddress.join(''), 2)] = +value
+            }
         } else {
             const { mask } = item.match(maskMatch).groups
 
