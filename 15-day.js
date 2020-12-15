@@ -3,30 +3,30 @@ const main = async () => {
     const input = data.split(',').map((item) => +item)
 
     const numbers = input.reduce((acc, item, index) => {
-        acc[item] = [index + 1]
+        if (index < input.length - 1) {
+            acc.set(item, index)
+        }
 
         return acc
-    }, {})
-    let index = input.length + 1
+    }, new Map())
+
+    let index = input.length
     let lastNumber = input[input.length - 1]
 
-    while (index <= 2020) {
-        let newNumber
+    while (index < 30000000) {
+        let newNumber = 0
 
-        if (numbers[lastNumber].length === 1) {
-            newNumber = 0
-            numbers[newNumber] = numbers[newNumber] ? [index, ...numbers[newNumber]] : [index]
-        } else {
-            const [a, b] = numbers[lastNumber]
-            newNumber = a - b
-            numbers[newNumber] = numbers[newNumber] ? [index, ...numbers[newNumber]] : [index]
+        if (numbers.has(lastNumber)) {
+            newNumber = (index - 1) - numbers.get(lastNumber)
         }
+
+        numbers.set(lastNumber, index - 1)
 
         lastNumber = newNumber
         index += 1
     }
 
-    console.log(lastNumber, index)
+    console.log(lastNumber)
 }
 
 main()
