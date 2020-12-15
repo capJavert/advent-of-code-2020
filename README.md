@@ -7,3 +7,4 @@
 ### Update #5: First killer of the year. Got it after a long weekend of work (hrcmszenalaunch).
 ### Update #6: Finished 13th day and second week of AOC2020.. Today I learned about [Chinese Remainder Theorem](https://www.youtube.com/watch?v=zIFehsBHB8o).. did not really help me solve this (AOC subreddit did) but it is an interesting Math concept!
 ### Update #7: Lucky 7! This is what I call a fun and cool challenge >>> Working with bits is fun!
+### Update #8: `Map > {}` for many reads/writes "[Performs better in scenarios involving frequent additions and removals of key-value pairs.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)"
