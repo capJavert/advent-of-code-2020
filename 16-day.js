@@ -1,7 +1,7 @@
 require('es6-promise').polyfill()
 const fetch = require('isomorphic-fetch')
 
-const ruleMatch = /(?<field>[a-z]{1,}): (?<range1>[0-9]{1,}-[0-9]{1,}) or (?<range2>[0-9]{1,}-[0-9]{1,})/
+const ruleMatch = /(?<field>[a-z ]{1,}): (?<range1>[0-9]{1,}-[0-9]{1,}) or (?<range2>[0-9]{1,}-[0-9]{1,})/
 
 const main = async () => {
     const data = await fetch('https://pastebin.com/raw/03MZuL6L').then((response) => response.text())
@@ -48,21 +48,68 @@ const main = async () => {
         return acc
     }, { fields: {}, tickets: [], section: 'rules' })
 
-    const [, ...otherTickets] = tickets
+    const [myTicket, ...otherTickets] = tickets
 
-    const result = otherTickets.reduce((acc, ticket) => {
-        ticket.forEach((item) => {
-            if (Object.values(fields).every((field) => {
+    const validTickets = [myTicket, ...otherTickets.filter((ticket) => {
+        return !ticket.some((item) => {
+            return Object.values(fields).every((field) => {
                 return !field.has(item)
-            })) {
-                acc.push(item)
+            })
+        })
+    })]
+
+    const fieldsForRows = {}
+    const orderedFields = {}
+
+    for (let i = 0; i < myTicket.length; i += 1) {
+        let fieldNames = Object.keys(fields)
+
+        for (let j = 0; j < validTickets.length; j += 1) {
+            fieldNames = fieldNames.filter((name) => {
+                const range = fields[name]
+
+                return range.has(validTickets[j][i])
+            })
+
+            if (fieldNames.length === 1) {
+                const nameForRow = fieldNames[0]
+                orderedFields[nameForRow] = +i
+                delete fields[nameForRow]
+
+                break
+            }
+        }
+
+        fieldsForRows[i] = fieldNames
+    }
+
+    while (Object.keys(orderedFields).length !== myTicket.length) {
+        Object.keys(fieldsForRows).forEach((row) => {
+            fieldsForRows[row] = fieldsForRows[row].filter((field) => !orderedFields[field])
+
+            if (fieldsForRows[row].length === 1) {
+                const nameForRow = fieldsForRows[row][0]
+                orderedFields[nameForRow] = row
+                delete fieldsForRows[row]
             }
         })
+    }
+
+    const translatedTicket = myTicket.reduce((acc, item, index) => {
+        const field = Object.keys(orderedFields).find((name) => +orderedFields[name] === index)
+
+        acc[field] = item
 
         return acc
-    }, [])
+    }, {})
 
-    console.log(result.reduce((acc, item) => acc + item, 0))
+    console.log(Object.keys(translatedTicket).reduce((acc, name) => {
+        if (name.startsWith('departure')) {
+            return acc * +translatedTicket[name]
+        }
+
+        return acc
+    }, 1))
 }
 
 main()
