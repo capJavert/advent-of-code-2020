@@ -4,7 +4,7 @@ const fetch = require('isomorphic-fetch')
 const ruleMatch = /(?<name>[0-9]{1,}): (?<ranges>.*)/
 
 const main = async () => {
-    const data = await fetch('https://pastebin.com/raw/KXzaynfh').then((response) => response.text())
+    const data = await fetch('https://pastebin.com/raw/z6DWCm13').then((response) => response.text())
     const input = data.split(/\r?\n/)
 
     const { rules, messages } = input.reduce((acc, item) => {
@@ -31,12 +31,28 @@ const main = async () => {
     }, { rules: {}, messages: [], rootRules: {} })
 
     let changed = true
+    const limits = {
+        8: 0,
+        11: 0
+    }
 
     const resolveRule = (rule) => {
         const resolvedRule = rules[rule] || rule
 
         if (resolvedRule !== rule) {
             changed = true
+        }
+
+        if (rule === '8' || rule === '11') {
+            limits[rule] += 1
+        }
+
+        // because rules 8 and 11 are recursive in part 2
+        // i just tried to compile regex of enough length
+        // to match all messages, once number of results settled
+        // that was final solution
+        if (limits[rule] > 11) {
+            return resolvedRule.join(' ').split(' | ')[0].split('')
         }
 
         return resolvedRule
