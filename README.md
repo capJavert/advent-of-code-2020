@@ -9,4 +9,6 @@
 ### Update #7: Lucky 7! This is what I call a fun and cool challenge >>> Working with bits is fun!
 ### Update #8: `Map > {}` for many reads/writes "[Performs better in scenarios involving frequent additions and removals of key-value pairs.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)"
 ### Update #9: Had to finish up some work before Xmas vacation and also today find a Xmas tree with my dad. I fell behind for few days. Finished 18th day though..
-### Update #9: Backtracking through missed days.. finished 17th day.. [John Conway rules!](https://playgameoflife.com/)
+### Update #10 Backtracking through missed days.. finished 17th day.. [John Conway rules!](https://playgameoflife.com/)
+### Update #11: 19th day... I did not know there is such thing as recursive regex.. JavaScript does not support it though :(
+### Update #12: Still backtracking.. managed to solve 19th, 22th and 23th day today. Now I am 2 days behind. Let's see if I can suprise myself and manage to solve everything before Xmas!
