@@ -1,40 +1,68 @@
 const main = async () => {
     const data = '792845136'
+    const indexMap = new Map()
     let input = data.split('').map((item) => +item)
-    let current = 0
 
-    for (let i = 1; i <= 100; i += 1) {
-        const temp = [...input]
-        const picks = temp.splice(current + 1, 3)
-        if (picks.length < 3) {
-            while (picks.length < 3) {
-                picks.push(temp.shift())
-            }
+    const lastNumber = Math.max(...input)
+    new Array(1000000 - data.length).fill().forEach((_, index) => {
+        input.push(lastNumber + index + 1)
+    })
+
+    input = input.map((item, index) => {
+        indexMap.set(item, index)
+
+        return {
+            value: item
         }
-        const currentCup = input[current]
-        let destination = currentCup - 1
-        const lowest = Math.min(...temp)
-        const highest = Math.max(...temp)
+    }).map((item, index, array) => {
+        // eslint-disable-next-line no-param-reassign
+        item.next = array[(index + 1) % array.length]
 
-        while (picks.includes(destination)) {
-            destination -= 1
+        indexMap.set(item.value, item)
 
-            if (destination < lowest) {
-                destination = highest
+        return item
+    })
+
+    const sortedAsc = [...input].sort((a, b) => a.value - b.value)
+    const sortedDesc = [...sortedAsc].reverse()
+
+    let currentCup = input[0]
+
+    for (let i = 1; i <= 10000000; i += 1) {
+        const picks = [
+            currentCup.next,
+            currentCup.next.next,
+            currentCup.next.next.next,
+        ]
+        let destinationValue = currentCup.value - 1
+        const lowest = sortedAsc.find((item) => !picks.some((item2) => item2.value === item.value))
+        // eslint-disable-next-line max-len
+        const highest = sortedDesc.find((item) => !picks.some((item2) => item2.value === item.value))
+
+        // eslint-disable-next-line no-loop-func
+        while (picks.some((item) => item.value === destinationValue)) {
+            destinationValue -= 1
+
+            if (destinationValue < lowest.value) {
+                destinationValue = highest.value
                 break
             }
         }
 
-        if (destination < lowest) {
-            destination = highest
+        if (destinationValue < lowest.value) {
+            destinationValue = highest.value
         }
 
-        temp.splice(temp.findIndex((item) => item === destination) + 1, 0, ...picks)
-        input = temp
-        current = (input.findIndex((item) => item === currentCup) + 1) % input.length
+        const destinationCup = indexMap.get(destinationValue)
+        currentCup.next = picks[2].next
+        picks[2].next = destinationCup.next
+        // eslint-disable-next-line prefer-destructuring
+        destinationCup.next = picks[0]
+
+        currentCup = currentCup.next
     }
 
-    console.log(input.join('').split('1').reverse().join(''))
+    console.log(indexMap.get(1).next.value * indexMap.get(1).next.next.value)
 }
 
 main()
