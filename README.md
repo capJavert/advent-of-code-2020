@@ -12,3 +12,4 @@
 ### Update #10 Backtracking through missed days.. finished 17th day.. [John Conway rules!](https://playgameoflife.com/)
 ### Update #11: 19th day... I did not know there is such thing as recursive regex.. JavaScript does not support it though :(
 ### Update #12: Still backtracking.. managed to solve 19th, 22th and 23th day today. Now I am 2 days behind. Let's see if I can suprise myself and manage to solve everything before Xmas!
+### Update #13: Solved 24th day relatively easy! 2 days behind still but.. Xmas tree called, it needs some decorations..
