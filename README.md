@@ -13,3 +13,4 @@
 ### Update #11: 19th day... I did not know there is such thing as recursive regex.. JavaScript does not support it though :(
 ### Update #12: Still backtracking.. managed to solve 19th, 22th and 23th day today. Now I am 2 days behind. Let's see if I can suprise myself and manage to solve everything before Xmas!
 ### Update #13: Solved 24th day relatively easy! 2 days behind still but.. Xmas tree called, it needs some decorations..
+### Update #14: That's a wrap for AOC 2020! Great year all around.. Missing 2 days still for this year which is significantly better than last two years. Looking forward to the next one ofc! 
